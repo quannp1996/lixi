@@ -33,33 +33,12 @@ const AdminPanel = {
 
     // Validate form
     validateForm() {
-        const questionTextField = document.getElementById('questionText');
-        console.log('Question field:', questionTextField);
-        console.log('Question field value:', questionTextField?.value);
-        console.log('Question field value trimmed:', questionTextField?.value.trim());
-        
         const questionText = document.getElementById('questionText')?.value.trim() || '';
         const option1 = document.getElementById('option1')?.value.trim() || '';
         const option2 = document.getElementById('option2')?.value.trim() || '';
         const option3 = document.getElementById('option3')?.value.trim() || '';
         const option4 = document.getElementById('option4')?.value.trim() || '';
         const correctAnswer = document.getElementById('correctAnswer')?.value || '';
-        const congratsMessage = document.getElementById('congratsMessage')?.value.trim() || '';
-
-        console.log('Validation Check:', {
-            questionText: questionText,
-            questionTextLength: questionText.length,
-            option1: option1,
-            option1Length: option1.length,
-            option2: option2,
-            option2Length: option2.length,
-            option3: option3,
-            option3Length: option3.length,
-            option4: option4,
-            option4Length: option4.length,
-            correctAnswer: correctAnswer,
-            congratsMessage: congratsMessage.length
-        });
 
         if (!questionText) {
             alert('❌ Vui lòng nhập câu hỏi!');
@@ -84,7 +63,6 @@ const AdminPanel = {
         if (!this.validateForm()) {
             return;
         }
-        alert('Đang thêm câu hỏi...');
 
         const questionData = {
             text: document.getElementById('questionText').value.trim(),
@@ -97,8 +75,6 @@ const AdminPanel = {
             correctAnswer: parseInt(document.getElementById('correctAnswer').value),
             congratsMessage: document.getElementById('congratsMessage').value.trim()
         };
-
-        console.log('Adding question:', questionData);
 
         DataManager.addQuestion(questionData);
 
