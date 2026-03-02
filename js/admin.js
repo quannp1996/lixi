@@ -8,21 +8,36 @@ const AdminPanel = {
     },
 
     setupEventListeners() {
-        // Add question button
-        document.getElementById('addQuestionBtn').addEventListener('click', () => {
-            this.handleAddQuestion();
-        });
+        // Add question button - remove old listeners first
+        const addBtn = document.getElementById('addQuestionBtn');
+        if (addBtn) {
+            // Clone and replace to remove all old listeners
+            const newBtn = addBtn.cloneNode(true);
+            addBtn.parentNode.replaceChild(newBtn, addBtn);
+            
+            newBtn.addEventListener('click', () => {
+                this.handleAddQuestion();
+            });
+        }
 
         // Allow Enter key to add question
-        document.getElementById('questionText').addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'Enter') {
-                this.handleAddQuestion();
-            }
-        });
+        const questionTextArea = document.getElementById('questionText');
+        if (questionTextArea) {
+            questionTextArea.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    this.handleAddQuestion();
+                }
+            });
+        }
     },
 
     // Validate form
     validateForm() {
+        const questionTextField = document.getElementById('questionText');
+        console.log('Question field:', questionTextField);
+        console.log('Question field value:', questionTextField?.value);
+        console.log('Question field value trimmed:', questionTextField?.value.trim());
+        
         const questionText = document.getElementById('questionText')?.value.trim() || '';
         const option1 = document.getElementById('option1')?.value.trim() || '';
         const option2 = document.getElementById('option2')?.value.trim() || '';
@@ -32,11 +47,16 @@ const AdminPanel = {
         const congratsMessage = document.getElementById('congratsMessage')?.value.trim() || '';
 
         console.log('Validation Check:', {
-            questionText: questionText.length,
-            option1: option1.length,
-            option2: option2.length,
-            option3: option3.length,
-            option4: option4.length,
+            questionText: questionText,
+            questionTextLength: questionText.length,
+            option1: option1,
+            option1Length: option1.length,
+            option2: option2,
+            option2Length: option2.length,
+            option3: option3,
+            option3Length: option3.length,
+            option4: option4,
+            option4Length: option4.length,
             correctAnswer: correctAnswer,
             congratsMessage: congratsMessage.length
         });
@@ -64,6 +84,7 @@ const AdminPanel = {
         if (!this.validateForm()) {
             return;
         }
+        alert('Đang thêm câu hỏi...');
 
         const questionData = {
             text: document.getElementById('questionText').value.trim(),
