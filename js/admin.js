@@ -56,11 +56,6 @@ const AdminPanel = {
             return false;
         }
 
-        if (!congratsMessage) {
-            alert('❌ Vui lòng nhập lời chúc!');
-            return false;
-        }
-
         return true;
     },
 
@@ -81,6 +76,8 @@ const AdminPanel = {
             correctAnswer: parseInt(document.getElementById('correctAnswer').value),
             congratsMessage: document.getElementById('congratsMessage').value.trim()
         };
+
+        console.log('Adding question:', questionData);
 
         DataManager.addQuestion(questionData);
 
