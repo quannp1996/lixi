@@ -192,7 +192,7 @@ const GameModule = {
         // Adjusted to center more within the tree crown area (x: 20-80, y: 8-55)
         const treePositions = [
             // Top center area
-            { x: 50, y: 10 },
+            { x: 20, y: 15 },
             { x: 42, y: 16 },
             { x: 58, y: 16 },
             // Upper left branch
