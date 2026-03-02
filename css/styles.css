@@ -1208,6 +1208,8 @@ body {
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 2px dashed #FFB6C1;
+    font-size: 18px;
+    color: #8B0000;
 }
 
 /* Image Configuration */
@@ -1228,6 +1230,7 @@ body {
     font-weight: 600;
     margin-bottom: 10px;
     color: #8B0000;
+    font-size: 15px;
 }
 
 .image-preview-container {
@@ -1257,6 +1260,10 @@ body {
 .image-upload-controls {
     display: flex;
     gap: 10px;
+}
+
+.file-input {
+    display: none;
 }
 
 .upload-btn {
@@ -1291,15 +1298,7 @@ body {
 
 .reset-image-btn:hover {
     background: linear-gradient(135deg, #7F8C8D, #6C7A7B);
-}
-
-/* Forms */
-.admin-form {
-    background: var(--bg-color);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    margin-bottom: 40px;
-    border: 2px dashed #FFB6C1;
+    transform: translateY(-2px);
 }
 
 .form-group {
@@ -1308,17 +1307,18 @@ body {
     flex-direction: column;
 }
 
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    display: block;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
     margin-bottom: 15px;
-}
-
-label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-color);
 }
 
 input[type="text"],
@@ -1330,7 +1330,9 @@ textarea {
     border-radius: 8px;
     font-family: inherit;
     font-size: 14px;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 input[type="text"]:focus,
@@ -1338,8 +1340,14 @@ input[type="number"]:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    border-color: #E74C3C;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+    background-color: #FFFBF0;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 textarea {

@@ -23,13 +23,23 @@ const AdminPanel = {
 
     // Validate form
     validateForm() {
-        const questionText = document.getElementById('questionText').value.trim();
-        const option1 = document.getElementById('option1').value.trim();
-        const option2 = document.getElementById('option2').value.trim();
-        const option3 = document.getElementById('option3').value.trim();
-        const option4 = document.getElementById('option4').value.trim();
-        const correctAnswer = document.getElementById('correctAnswer').value;
-        const congratsMessage = document.getElementById('congratsMessage').value.trim();
+        const questionText = document.getElementById('questionText')?.value.trim() || '';
+        const option1 = document.getElementById('option1')?.value.trim() || '';
+        const option2 = document.getElementById('option2')?.value.trim() || '';
+        const option3 = document.getElementById('option3')?.value.trim() || '';
+        const option4 = document.getElementById('option4')?.value.trim() || '';
+        const correctAnswer = document.getElementById('correctAnswer')?.value || '';
+        const congratsMessage = document.getElementById('congratsMessage')?.value.trim() || '';
+
+        console.log('Validation Check:', {
+            questionText: questionText.length,
+            option1: option1.length,
+            option2: option2.length,
+            option3: option3.length,
+            option4: option4.length,
+            correctAnswer: correctAnswer,
+            congratsMessage: congratsMessage.length
+        });
 
         if (!questionText) {
             alert('❌ Vui lòng nhập câu hỏi!');
