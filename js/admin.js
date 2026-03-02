@@ -185,6 +185,7 @@ const ImageConfig = {
     STORAGE_KEY: 'luckyDraw_images',
     defaultBg: 'images/tet-background.jpg',
     defaultTree: 'images/peach-tree.png',
+    defaultEnvelope: 'images/lixi.png',
 
     init() {
         this.loadSavedImages();
@@ -213,6 +214,18 @@ const ImageConfig = {
         const resetTreeBtn = document.getElementById('resetTreeBtn');
         if (resetTreeBtn) {
             resetTreeBtn.addEventListener('click', () => this.resetImage('tree'));
+        }
+
+        // Envelope image upload
+        const envelopeUpload = document.getElementById('envelopeUpload');
+        if (envelopeUpload) {
+            envelopeUpload.addEventListener('change', (e) => this.handleImageUpload(e, 'envelope'));
+        }
+
+        // Reset envelope button
+        const resetEnvelopeBtn = document.getElementById('resetEnvelopeBtn');
+        if (resetEnvelopeBtn) {
+            resetEnvelopeBtn.addEventListener('click', () => this.resetImage('envelope'));
         }
     },
 
@@ -266,6 +279,11 @@ const ImageConfig = {
             this.applyImage('tree', images.tree);
             this.updatePreview('tree', images.tree);
         }
+
+        if (images.envelope) {
+            this.applyImage('envelope', images.envelope);
+            this.updatePreview('envelope', images.envelope);
+        }
     },
 
     applyImage(type, imageData) {
@@ -276,6 +294,11 @@ const ImageConfig = {
             if (treeImg) {
                 treeImg.src = imageData;
             }
+        } else if (type === 'envelope') {
+            const envelopes = document.querySelectorAll('.envelope');
+            envelopes.forEach(envelope => {
+                envelope.style.backgroundImage = `url('${imageData}')`;
+            });
         }
     },
 
@@ -285,6 +308,9 @@ const ImageConfig = {
             if (preview) preview.src = imageData;
         } else if (type === 'tree') {
             const preview = document.getElementById('treePreview');
+            if (preview) preview.src = imageData;
+        } else if (type === 'envelope') {
+            const preview = document.getElementById('envelopePreview');
             if (preview) preview.src = imageData;
         }
     },
@@ -303,8 +329,11 @@ const ImageConfig = {
             if (treeImg) treeImg.src = this.defaultTree;
             this.updatePreview('tree', this.defaultTree);
             alert('✅ Đã khôi phục ảnh cây đào mặc định!');
+        } else if (type === 'envelope') {
+            this.applyImage('envelope', this.defaultEnvelope);
+            this.updatePreview('envelope', this.defaultEnvelope);
+            alert('✅ Đã khôi phục ảnh lì xì mặc định!');
         }
-    }
 };
 
 // Initialize admin panel when page loads
