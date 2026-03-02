@@ -196,8 +196,8 @@ const GameModule = {
             { x: 42, y: 16 },
             { x: 58, y: 16 },
             // Upper left branch
-            { x: 30, y: 22 },
-            { x: 22, y: 30 },
+            { x: 17, y: 45 },
+            { x: 60, y: 40 },
             { x: 28, y: 38 },
             // Upper right branch  
             { x: 70, y: 22 },
