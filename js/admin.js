@@ -334,6 +334,7 @@ const ImageConfig = {
             this.updatePreview('envelope', this.defaultEnvelope);
             alert('✅ Đã khôi phục ảnh lì xì mặc định!');
         }
+    }
 };
 
 // Initialize admin panel when page loads
