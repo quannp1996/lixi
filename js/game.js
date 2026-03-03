@@ -156,14 +156,26 @@ const GameModule = {
 
         // Calculate positions for envelopes on the tree (circular arrangement)
         const positions = this.calculateEnvelopePositions(this.envelopesCount);
+        
+        // Load saved positions
+        const savedPositions = this.loadEnvelopePositions();
 
         for (let i = 0; i < this.envelopesCount; i++) {
             const envelope = document.createElement('div');
             envelope.className = 'envelope';
             envelope.textContent = (i + 1).toString();
-            envelope.style.left = positions[i].x + '%';
-            envelope.style.top = positions[i].y + '%';
+            
+            // Use saved position if exists, otherwise use default position
+            if (savedPositions[i]) {
+                envelope.style.left = savedPositions[i].x + '%';
+                envelope.style.top = savedPositions[i].y + '%';
+            } else {
+                envelope.style.left = positions[i].x + '%';
+                envelope.style.top = positions[i].y + '%';
+            }
+            
             envelope.dataset.index = i;
+            envelope.draggable = true;
             
             // Random swing animation
             const swingDuration = 2.5 + Math.random() * 1.5;
@@ -176,12 +188,92 @@ const GameModule = {
                 envelope.classList.add('used');
             }
 
+            // Click handler
             envelope.addEventListener('click', () => {
                 this.handleEnvelopeClick(i);
             });
 
+            // Drag & Drop handlers
+            envelope.addEventListener('dragstart', (e) => this.handleDragStart(e, envelope));
+            envelope.addEventListener('dragend', (e) => this.handleDragEnd(e, envelope));
+
             container.appendChild(envelope);
         }
+
+        // Setup drop zone on container
+        container.addEventListener('dragover', (e) => this.handleDragOver(e));
+        container.addEventListener('drop', (e) => this.handleDrop(e));
+        container.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+    },
+
+    // Drag start handler
+    handleDragStart(e, envelope) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', envelope.innerHTML);
+        envelope.classList.add('dragging');
+        envelope.style.opacity = '0.5';
+    },
+
+    // Drag end handler
+    handleDragEnd(e, envelope) {
+        envelope.classList.remove('dragging');
+        envelope.style.opacity = '1';
+    },
+
+    // Drag over handler
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const container = document.getElementById('envelopesContainer');
+        container.classList.add('drag-over');
+    },
+
+    // Drag leave handler
+    handleDragLeave(e) {
+        if (e.target.id === 'envelopesContainer') {
+            const container = document.getElementById('envelopesContainer');
+            container.classList.remove('drag-over');
+        }
+    },
+
+    // Drop handler
+    handleDrop(e) {
+        e.preventDefault();
+        const container = document.getElementById('envelopesContainer');
+        container.classList.remove('drag-over');
+
+        const draggingElement = document.querySelector('.envelope.dragging');
+        if (draggingElement) {
+            // Get mouse position relative to container
+            const rect = container.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+            // Clamp values to stay within container
+            const clampedX = Math.max(0, Math.min(100 - 6, x));
+            const clampedY = Math.max(0, Math.min(100 - 6, y));
+
+            // Update position
+            draggingElement.style.left = clampedX + '%';
+            draggingElement.style.top = clampedY + '%';
+
+            // Save position to localStorage for persistence
+            const index = parseInt(draggingElement.dataset.index);
+            this.saveEnvelopePosition(index, clampedX, clampedY);
+        }
+    },
+
+    // Save envelope position to localStorage
+    saveEnvelopePosition(index, x, y) {
+        const positions = JSON.parse(localStorage.getItem('envelopePositions') || '{}');
+        positions[index] = { x, y };
+        localStorage.setItem('envelopePositions', JSON.stringify(positions));
+    },
+
+    // Load saved envelope positions
+    loadEnvelopePositions() {
+        const positions = JSON.parse(localStorage.getItem('envelopePositions') || '{}');
+        return positions;
     },
 
     // Calculate positions for envelopes on the peach tree branches
