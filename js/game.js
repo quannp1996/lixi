@@ -203,9 +203,14 @@ const GameModule = {
         // Setup drop zone on tree image container (not envelope container)
         const treeContainer = document.querySelector('.tree-image-container');
         if (treeContainer) {
-            treeContainer.addEventListener('dragover', (e) => this.handleDragOver(e));
-            treeContainer.addEventListener('drop', (e) => this.handleDrop(e));
+            // Allow dragover and drop
+            treeContainer.addEventListener('dragover', (e) => this.handleDragOver(e, treeContainer));
+            treeContainer.addEventListener('drop', (e) => this.handleDrop(e, treeContainer));
             treeContainer.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+            
+            // Also add to document for better tracking
+            document.addEventListener('dragover', (e) => this.handleDragOver(e, treeContainer));
+            document.addEventListener('drop', (e) => this.handleDrop(e, treeContainer));
         }
     },
 
@@ -221,15 +226,20 @@ const GameModule = {
     handleDragEnd(e, envelope) {
         envelope.classList.remove('dragging');
         envelope.style.opacity = '1';
+        
+        // Remove highlight from tree
+        const treeContainer = document.querySelector('.tree-image-container');
+        if (treeContainer) {
+            treeContainer.classList.remove('drag-over-tree');
+        }
     },
 
     // Drag over handler
-    handleDragOver(e) {
+    handleDragOver(e, treeContainer) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         
-        // Only allow drop over tree image container
-        const treeContainer = document.querySelector('.tree-image-container');
+        // Check if drop is over tree image
         if (treeContainer) {
             const rect = treeContainer.getBoundingClientRect();
             const isOverTree = (
@@ -250,17 +260,20 @@ const GameModule = {
     // Drag leave handler
     handleDragLeave(e) {
         const treeContainer = document.querySelector('.tree-image-container');
-        if (treeContainer && e.target === treeContainer) {
+        if (treeContainer) {
             treeContainer.classList.remove('drag-over-tree');
         }
     },
 
     // Drop handler
-    handleDrop(e) {
+    handleDrop(e, treeContainer) {
         e.preventDefault();
         
         // Check if drop is over tree image
-        const treeContainer = document.querySelector('.tree-image-container');
+        if (!treeContainer) {
+            treeContainer = document.querySelector('.tree-image-container');
+        }
+        
         const rect = treeContainer.getBoundingClientRect();
         
         const isOverTree = (
