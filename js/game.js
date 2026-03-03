@@ -274,13 +274,13 @@ const GameModule = {
             treeContainer = document.querySelector('.tree-image-container');
         }
         
-        const rect = treeContainer.getBoundingClientRect();
+        const treeRect = treeContainer.getBoundingClientRect();
         
         const isOverTree = (
-            e.clientX >= rect.left &&
-            e.clientX <= rect.right &&
-            e.clientY >= rect.top &&
-            e.clientY <= rect.bottom
+            e.clientX >= treeRect.left &&
+            e.clientX <= treeRect.right &&
+            e.clientY >= treeRect.top &&
+            e.clientY <= treeRect.bottom
         );
 
         if (!isOverTree) {
@@ -293,13 +293,17 @@ const GameModule = {
 
         const draggingElement = document.querySelector('.envelope.dragging');
         if (draggingElement) {
-            // Get mouse position relative to tree container
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            // Get the envelopes container bounds (the actual drop zone)
+            const envelopesContainer = document.getElementById('envelopesContainer');
+            const containerRect = envelopesContainer.getBoundingClientRect();
+            
+            // Get mouse position relative to envelopes container
+            const x = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+            const y = ((e.clientY - containerRect.top) / containerRect.height) * 100;
 
-            // Clamp values to stay within tree container
-            const clampedX = Math.max(0, Math.min(100 - 6, x));
-            const clampedY = Math.max(0, Math.min(100 - 6, y));
+            // Clamp values to stay within container (accounting for envelope size ~6%)
+            const clampedX = Math.max(0, Math.min(94, x));
+            const clampedY = Math.max(0, Math.min(94, y));
 
             // Update position
             draggingElement.style.left = clampedX + '%';
