@@ -1074,26 +1074,6 @@ body {
     overflow: hidden;
 }
 
-.game-title::before {
-    content: '🧧';
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    animation: rotateIcon 4s linear infinite;
-}
-
-.game-title::after {
-    content: '🧧';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    animation: rotateIcon 4s linear infinite reverse;
-}
-
 @keyframes rotateIcon {
     0%, 100% { transform: translateY(-50%) rotate(0deg); }
     50% { transform: translateY(-50%) rotate(360deg); }

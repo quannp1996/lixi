@@ -86,6 +86,13 @@ const MainApp = {
     },
 
     setupAdminOverlay() {
+
+        const music = new Audio("./images/happy-new-year.mp3");
+        music.loop = true;     // loop vô hạn
+        music.volume = 0.3;    // âm lượng (0 → 1)
+        document.addEventListener("click", () => {
+        music.play();
+        }, { once: true });
         // Add click outside to close admin
         const adminPanel = document.getElementById('admin');
         if (adminPanel) {
