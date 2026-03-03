@@ -200,10 +200,13 @@ const GameModule = {
             container.appendChild(envelope);
         }
 
-        // Setup drop zone on container
-        container.addEventListener('dragover', (e) => this.handleDragOver(e));
-        container.addEventListener('drop', (e) => this.handleDrop(e));
-        container.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+        // Setup drop zone on tree image container (not envelope container)
+        const treeContainer = document.querySelector('.tree-image-container');
+        if (treeContainer) {
+            treeContainer.addEventListener('dragover', (e) => this.handleDragOver(e));
+            treeContainer.addEventListener('drop', (e) => this.handleDrop(e));
+            treeContainer.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+        }
     },
 
     // Drag start handler
@@ -224,32 +227,64 @@ const GameModule = {
     handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        const container = document.getElementById('envelopesContainer');
-        container.classList.add('drag-over');
+        
+        // Only allow drop over tree image container
+        const treeContainer = document.querySelector('.tree-image-container');
+        if (treeContainer) {
+            const rect = treeContainer.getBoundingClientRect();
+            const isOverTree = (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            );
+            
+            if (isOverTree) {
+                treeContainer.classList.add('drag-over-tree');
+            } else {
+                treeContainer.classList.remove('drag-over-tree');
+            }
+        }
     },
 
     // Drag leave handler
     handleDragLeave(e) {
-        if (e.target.id === 'envelopesContainer') {
-            const container = document.getElementById('envelopesContainer');
-            container.classList.remove('drag-over');
+        const treeContainer = document.querySelector('.tree-image-container');
+        if (treeContainer && e.target === treeContainer) {
+            treeContainer.classList.remove('drag-over-tree');
         }
     },
 
     // Drop handler
     handleDrop(e) {
         e.preventDefault();
-        const container = document.getElementById('envelopesContainer');
-        container.classList.remove('drag-over');
+        
+        // Check if drop is over tree image
+        const treeContainer = document.querySelector('.tree-image-container');
+        const rect = treeContainer.getBoundingClientRect();
+        
+        const isOverTree = (
+            e.clientX >= rect.left &&
+            e.clientX <= rect.right &&
+            e.clientY >= rect.top &&
+            e.clientY <= rect.bottom
+        );
+
+        if (!isOverTree) {
+            // Drop not on tree, cancel operation
+            treeContainer.classList.remove('drag-over-tree');
+            return;
+        }
+
+        treeContainer.classList.remove('drag-over-tree');
 
         const draggingElement = document.querySelector('.envelope.dragging');
         if (draggingElement) {
-            // Get mouse position relative to container
-            const rect = container.getBoundingClientRect();
+            // Get mouse position relative to tree container
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-            // Clamp values to stay within container
+            // Clamp values to stay within tree container
             const clampedX = Math.max(0, Math.min(100 - 6, x));
             const clampedY = Math.max(0, Math.min(100 - 6, y));
 
@@ -284,12 +319,12 @@ const GameModule = {
         // Adjusted to center more within the tree crown area (x: 20-80, y: 8-55)
         const treePositions = [
             // Top center area
-            { x: 20, y: 15 },
+            { x: 50, y: 10 },
             { x: 42, y: 16 },
             { x: 58, y: 16 },
             // Upper left branch
-            { x: 17, y: 45 },
-            { x: 60, y: 40 },
+            { x: 30, y: 22 },
+            { x: 22, y: 30 },
             { x: 28, y: 38 },
             // Upper right branch  
             { x: 70, y: 22 },
